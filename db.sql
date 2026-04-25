@@ -258,6 +258,34 @@ INSERT INTO subscriptions (card_id, billing_date, monthly_fee, status)
 VALUES (
     (SELECT card_id FROM library_cards WHERE card_number = 'CARD-998877'),
     CURRENT_DATE,
-    10.00,
+    20.00,
     'active'
 );
+
+-- Seed Books
+INSERT INTO books (category_id, added_by, title, author, isbn, publisher, publish_year, description)
+VALUES 
+(
+    (SELECT category_id FROM book_categories WHERE name = 'Fiction'),
+    (SELECT account_id FROM accounts WHERE email = 'sarah.c@library.local'),
+    'The Great Gatsby', 'F. Scott Fitzgerald', '9780743273565', 'Scribner', 1925, 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.'
+),
+(
+    (SELECT category_id FROM book_categories WHERE name = 'Science'),
+    (SELECT account_id FROM accounts WHERE email = 'admin@library.local'),
+    'A Brief History of Time', 'Stephen Hawking', '9780553380163', 'Bantam Books', 1988, 'A landmark volume in science writing by one of the great minds of our time.'
+),
+(
+    (SELECT category_id FROM book_categories WHERE name = 'Technology'),
+    (SELECT account_id FROM accounts WHERE email = 'sarah.c@library.local'),
+    'Clean Code', 'Robert C. Martin', '9780132350884', 'Prentice Hall', 2008, 'A Handbook of Agile Software Craftsmanship.'
+);
+
+-- Seed Book Copies
+INSERT INTO book_copies (book_id, condition, is_available)
+VALUES 
+    ((SELECT book_id FROM books WHERE isbn = '9780743273565'), 'new', true),
+    ((SELECT book_id FROM books WHERE isbn = '9780743273565'), 'good', true),
+    ((SELECT book_id FROM books WHERE isbn = '9780553380163'), 'good', true),
+    ((SELECT book_id FROM books WHERE isbn = '9780132350884'), 'new', true),
+    ((SELECT book_id FROM books WHERE isbn = '9780132350884'), 'fair', true);
